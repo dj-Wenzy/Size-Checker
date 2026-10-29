@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Проверка разрешения окна</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            color: black;
+            overflow: hidden;
+        }
+        html, body {
+            height: 100%;
+            width: 100%;
+        }
+        .container {
+            text-align: center;
+        }
+        .coord {
+            font-size: 15vw;
+            line-height: 1.3;
+            margin: 20px;
+            white-space: nowrap;
+        }
+    </style>
+    <hta:application
+        id="SizeChecker"
+        border="normal"           // Изменено с "thin" на "normal" для возможности изменения размера
+        caption="yes"
+        maximizebutton="yes"
+        minimizebutton="yes"
+        sysmenu="yes"
+        navigable="no"
+        scroll="no"
+        scrollflat="yes"
+        windowstate="normal"
+        showintaskbar="yes"
+        singleinstance="no"
+        contextmenu="no"
+        selection="no"
+        innerborder="no"
+    />
+</head>
+<body>
+    <div class="container">
+        <div class="coord" id="widthDisplay">X: 0</div>
+        <div class="coord" id="heightDisplay">Y: 0</div>
+    </div>
+
+    <script language="VBScript">
+        Sub UpdateSize
+            On Error Resume Next
+            
+            ' Получаем размеры окна
+            Dim w, h
+            w = document.body.clientWidth
+            h = document.body.clientHeight
+            
+            ' Если не получилось, пробуем через documentElement
+            If w = 0 Or Err.Number <> 0 Then
+                w = document.documentElement.clientWidth
+                h = document.documentElement.clientHeight
+            End If
+            
+            ' Обновляем текст
+            document.getElementById("widthDisplay").innerText = "X: " & w
+            document.getElementById("heightDisplay").innerText = "Y: " & h
+        End Sub
+        
+        ' Обработчики событий
+        Sub window_onresize
+            UpdateSize
+        End Sub
+        
+        Sub window_onload
+            UpdateSize
+        End Sub
+        
+        Sub window_onfocus
+            UpdateSize
+        End Sub
+    </script>
+</body>
+</html>
